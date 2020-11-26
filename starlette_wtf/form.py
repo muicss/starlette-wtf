@@ -111,6 +111,13 @@ class StarletteForm(Form):
             
         # return new instance
         return cls(request, formdata=formdata, **kwargs)
+
+    
+    async def validate(self):
+        """Overload :meth:`validate` to handle custom async validators
+        """
+        print(self._fields.items())
+        return super().validate()
     
     
     def is_submitted(self):
