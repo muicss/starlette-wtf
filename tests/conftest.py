@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 from starlette.applications import Starlette
 from starlette.testclient import TestClient
@@ -54,19 +56,27 @@ def FormWithCustomValidators():
     
     
 @pytest.fixture
-def FormWithCustomAsyncValidators():
+def FormWithAsyncValidators():
     """Return FormWithCustomAsyncValidators class
     """
-    class FormWithCustomAsyncValidators(StarletteForm):
+    class FormWithAsyncValidators(StarletteForm):
         field1 = StringField()
-        field2 = StringField()
+        field2 = StringField(validators=[DataRequired()])
 
-        async def validate_field1(self, value):
+        async def async_validate_field1(self, value):
+            # test wait
+            await asyncio.sleep(.01)
+
+            # raise exception
             if not value == 'value1':
                 raise ValidationError('Field value is incorrect.')
 
-        async def validate_field2(self, value):
+        async def async_validate_field2(self, value):
+            # test wait
+            await asyncio.sleep(.02)
+
+            # raise exception
             if not value == 'value2':
                 raise ValidationError('Field value is incorrect.')
             
-    return FormWithCustomAsyncValidators
+    return FormWithAsyncValidators
