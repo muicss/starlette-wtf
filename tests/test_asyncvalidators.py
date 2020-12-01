@@ -50,7 +50,7 @@ def test_data_required_error(app, client, FormWithAsyncValidators):
     async def index(request):
         form = await FormWithAsyncValidators.from_formdata(request)
         assert form.field1.data == 'xxx1'
-        assert form.field2.data == None
+        assert form.field2.data == ''
 
         # validate and check again
         success = await form.validate()
@@ -67,3 +67,20 @@ def test_data_required_error(app, client, FormWithAsyncValidators):
         return PlainTextResponse()
 
     client.post('/', data={'field1': 'xxx1'})
+
+
+def test_async_validator_exception(app, client, FormWithAsyncException):
+    @app.route('/', methods=['POST'])
+    async def index(request):
+        form = await FormWithAsyncException.from_formdata(request)
+        try:
+            await form.validate()
+        except Exception as err:
+            assert err.args[0] == 'test'
+        else:
+            assert False
+
+        return PlainTextResponse()
+        
+    client.post('/', data={'field1': 'xxx1', 'field2': 'xxx2'})
+

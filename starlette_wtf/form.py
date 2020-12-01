@@ -123,9 +123,9 @@ class StarletteForm(Form):
             await validator(self, field)
         except ValidationError as e:
             field.errors.append(e.args[0])
+            return False
+        return True
 
-        return False
-           
     
     async def validate(self, extra_validators=None):
         """Overload :meth:`validate` to handle custom async validators

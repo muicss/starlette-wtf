@@ -57,7 +57,7 @@ def FormWithCustomValidators():
     
 @pytest.fixture
 def FormWithAsyncValidators():
-    """Return FormWithCustomAsyncValidators class
+    """Return FormWithAsyncValidators class
     """
     class FormWithAsyncValidators(StarletteForm):
         field1 = StringField()
@@ -80,3 +80,17 @@ def FormWithAsyncValidators():
                 raise ValidationError('Field value is incorrect.')
             
     return FormWithAsyncValidators
+
+
+@pytest.fixture
+def FormWithAsyncException():
+    """Return FormWithAsyncException class
+    """
+    class FormWithAsyncException(StarletteForm):
+        field1 = StringField()
+
+        async def async_validate_field1(self, value):
+            await asyncio.sleep(.01)
+            raise Exception('test')
+
+    return FormWithAsyncException
