@@ -27,7 +27,7 @@ setup(
         'WTForms'
     ],
     extras_require={
-        'test': ['pytest', 'requests']
+        'test': ['pytest', 'requests', 'jinja2']
     },
     classifiers=[
         "Development Status :: 3 - Alpha",
